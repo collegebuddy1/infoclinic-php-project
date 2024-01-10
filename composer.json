@@ -1,0 +1,65 @@
+{
+  "name": "infoclinic/web",
+  "description": "Infoclinic CMS and PWA",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "drtechie",
+      "role": "Dev Lead"
+    }
+  ],
+  "repositories":[
+    {
+      "type":"composer",
+      "url":"https://wpackagist.org"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "composer/installers": true,
+      "johnpbloch/wordpress-core-installer": true
+    }
+  },
+  "require": {
+    "composer/installers": "^1.2",
+    "deployer/dist": "^6.3",
+    "johnpbloch/wordpress-core": "^6.1",
+    "johnpbloch/wordpress-core-installer": "^2.0",
+    "vlucas/phpdotenv": "^2.5",
+    "wpackagist-plugin/acf-to-rest-api": "^3.3",
+    "wpackagist-plugin/advanced-custom-fields": "^5.9",
+    "wpackagist-plugin/classic-editor": "^1.6",
+    "wpackagist-plugin/co-authors-plus": "^3.4",
+    "wpackagist-plugin/google-sitemap-generator": "^4.1",
+    "wpackagist-plugin/redis-cache": "^2.0",
+    "wpackagist-plugin/rss-feed-styles": "^1.0",
+    "wpackagist-plugin/sparkpost": "^3.2",
+    "wpackagist-plugin/wordpress-2-step-verification": "^2.3",
+    "wpackagist-plugin/wp-user-avatar": "^2.2"
+  },
+  "extra": {
+    "installer-paths": {
+      "wordpress/wp-content/plugins/{$name}/": ["type:wordpress-plugin"],
+      "wordpress/wp-content/themes/{$name}/": ["type:wordpress-theme"]
+    },
+    "wordpress-install-dir": "wordpress"
+  },
+  "scripts" : {
+    "copy-theme": "rm -rf $(pwd)/wordpress/wp-content/themes/rest-api && ln -sf $(pwd)/rest-api $(pwd)/wordpress/wp-content/themes/rest-api",
+    "copy-config": "rm -f $(pwd)/wordpress/wp-config.php && ln -sf $(pwd)/config/wp-config.php $(pwd)/wordpress/wp-config.php",
+    "wordpress-db-create": "cd wordpress && wp db create",
+    "wordpress-db-setup": "cd wordpress && wp core install --url='http://localhost:8000' --title='infoclinic' --admin_user='admin' --admin_password='password' --admin_email='admin@example.com'",
+    "yarn-install": "cd client && yarn install --check-files",
+    "infoclinic-install" : [
+      "@copy-theme",
+      "@copy-config",
+      "@wordpress-db-create",
+      "@wordpress-db-setup",
+      "@yarn-install"
+    ]
+  }
+}
